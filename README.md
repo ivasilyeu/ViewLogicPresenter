@@ -1,2 +1,2 @@
 # ViewLogicPresenter
- A reimagining of VIPER architecture pattern
+ A reimagining of VIPER architectural design pattern
