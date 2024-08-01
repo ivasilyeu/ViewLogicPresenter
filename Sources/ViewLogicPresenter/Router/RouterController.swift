@@ -1,26 +1,26 @@
 //
-//  FlowController.swift
+//  RouterController.swift
 //
 //  Created by IV on 01.12.2016.
 //
 
 import UIKit
 
-// MARK: - FlowController
+// MARK: - RouterController
 
 /**
- Abstract base class. Derive all flow controllers from it.
+ Abstract base class. Derive all Router controllers from it.
 
- - Note: ``FlowController`` corresponds to Router from VIPER architectural design pattern.
+ - Note: ``RouterController`` corresponds to Router from VIPER architectural design pattern.
  */
-open class FlowController: UIViewController {
+open class RouterController: UIViewController {
 
     fileprivate(set) weak var currentExternalPreferencesChild: UIViewController?
 }
 
 // MARK: - ExternalPreferencesUpdate
 
-extension FlowController {
+extension RouterController {
 
     /**
      Apply a child view controller which should control the external preferences
@@ -106,7 +106,7 @@ extension FlowController {
 
 // MARK: - NavigationBarPreferencesProvider
 
-extension FlowController: NavigationBarPreferencesProvider {
+extension RouterController: NavigationBarPreferencesProvider {
 
     var childForNavigationBarPreferences: NavigationBarPreferencesProvider? {
         currentExternalPreferencesChild as? NavigationBarPreferencesProvider
