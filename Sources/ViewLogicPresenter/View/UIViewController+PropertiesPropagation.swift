@@ -1,7 +1,9 @@
 //
 //  UIViewController+PropertiesPropagation.swift
+//  IV
 //
-//  Created by IV on 01.12.2016.
+//  Created by IV on 23.01.2022.
+//  Copyright © 2022 IV. All rights reserved.
 //
 
 import UIKit
@@ -137,7 +139,17 @@ fileprivate extension UIViewController {
             return
         }
 
-        guard let tabBarController = tabBarController, tabBarController.tabBar.isHidden != hidesBottomBarWhenPushed else {
+        var tabBarNeedsUpdate = false
+        if let tabBarController, tabBarController.tabBar.isHidden != hidesBottomBarWhenPushed {
+            tabBarNeedsUpdate = true
+        }
+
+        var multitabBarNeedsUpdate = false
+        if let multitabBarController, multitabBarController.tabBarHidden != hidesBottomBarWhenPushed {
+            multitabBarNeedsUpdate = true
+        }
+
+        guard tabBarNeedsUpdate || multitabBarNeedsUpdate else {
             return
         }
 
@@ -213,5 +225,25 @@ fileprivate extension UIViewController {
     func retrieveModalPresentationStyleDestination() -> UIViewController {
         guard let parent else { return self }
         return parent.childForModalPresentationStyle === self ? parent.retrieveModalPresentationStyleDestination() : self
+    }
+}
+
+// MARK: - MultitabBarController
+
+extension UIViewController {
+
+    /**
+     The nearest ancestor in the view controller hierarchy that is a ``MultitabBarController``.
+
+     If the view controller has a ``MultitabBarController`` as its ancestor, returns it. Returns `nil` otherwise.
+     */
+    var multitabBarController: MultitabBarController? {
+        guard let parent else { return nil }
+
+        if let result = parent as? MultitabBarController {
+            return result
+        }
+
+        return parent.multitabBarController
     }
 }

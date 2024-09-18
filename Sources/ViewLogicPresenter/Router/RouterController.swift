@@ -38,7 +38,7 @@ extension RouterController {
      */
     func applyChildForExternalPreferences(_ child: UIViewController?) {
 
-        if let child = child {
+        if let child {
             assert(children.contains(child), "the specified view controller is not part of the children array")
         }
 
@@ -92,7 +92,7 @@ extension RouterController {
         setNeedsUpdateOfHomeIndicatorAutoHidden()
         setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
         if #available(iOS 14.0, *) {
-            setNeedsUpdateOfPrefersPointerLocked()
+        setNeedsUpdateOfPrefersPointerLocked()
         }
 
         setNeedsNavigationItemUpdate()
