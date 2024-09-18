@@ -22,9 +22,9 @@ extension UIViewController {
      - Returns: the child controller's pinning result, if the view controller gets pinned to its parent as part of the call, `nil` otherwise.
      */
     @discardableResult
-    func installNonForcibly(childViewController child: UIViewController, intoView view: UIView? = nil, toEdges: Bool = true) -> ViewPinResult? {
+    func installNonForcibly(childViewController child: UIViewController, intoView view: UIView? = nil, belowView: UIView? = nil, toEdges: Bool = true) -> ViewPinResult? {
 
-        install(childViewController: child, intoView: view, toEdges: toEdges, forceLoadView: false)
+        install(childViewController: child, intoView: view, belowView: belowView, toEdges: toEdges, forceLoadView: false)
     }
 
     /**
@@ -33,9 +33,9 @@ extension UIViewController {
      - Returns: the child controller's pinning result, if the view controller gets pinned to its parent as part of the call, `nil` otherwise.
      */
     @discardableResult
-    func finishInstall(childViewController child: UIViewController, intoView view: UIView? = nil, toEdges: Bool = true) -> ViewPinResult? {
+    func finishInstall(childViewController child: UIViewController, intoView view: UIView? = nil, belowView: UIView? = nil, toEdges: Bool = true) -> ViewPinResult? {
 
-        install(childViewController: child, intoView: view, toEdges: toEdges, forceLoadView: false)
+        install(childViewController: child, intoView: view, belowView: belowView, toEdges: toEdges, forceLoadView: false)
     }
 
     /**
@@ -54,7 +54,7 @@ extension UIViewController {
      - Returns: the child controller's pinning result, if the view controller gets pinned to its parent as part of the call, `nil` otherwise.
      */
     @discardableResult
-    func install(childViewController child: UIViewController, intoView view: UIView? = nil, toEdges: Bool = true, forceLoadView: Bool = true) -> ViewPinResult? {
+    func install(childViewController child: UIViewController, intoView view: UIView? = nil, belowView: UIView? = nil, toEdges: Bool = true, forceLoadView: Bool = true) -> ViewPinResult? {
 
         if !children.contains(child) {
             addChild(child)
@@ -68,7 +68,11 @@ extension UIViewController {
         let parentView: UIView = view ?? self.view
         if !parentView.subviews.contains(child.view) {
 
-            parentView.addSubview(child.view)
+            if let belowView {
+                parentView.insertSubview(child.view, belowSubview: belowView)
+            } else {
+                parentView.addSubview(child.view)
+            }
             child.view.translatesAutoresizingMaskIntoConstraints = false
             result = child.view.pinTo(view: parentView, options: toEdges ? .edges : .safeArea, insets: .zero, priorities: .required, deferActivation: false)
         }
@@ -105,16 +109,17 @@ extension UIViewController {
 
      - Parameter toEdges: Pass in `true` in order to pin the child view controller to the edges of the parent view or view controller, or `false` in order to pin it to the corresponding safe area. This value is ignored if the receiver's root view is not yet loaded. The default value is `true`.
      */
-    func installChildViewControllerNonForcibly(_ child: UIViewController, intoView view: UIView? = nil, toEdges: Bool = true) {
+    func installChildViewControllerNonForcibly(_ child: UIViewController, intoView view: UIView? = nil, belowView: UIView? = nil, toEdges: Bool = true) {
 
-        installNonForcibly(childViewController: child, intoView: view, toEdges: toEdges)
+        installNonForcibly(childViewController: child, intoView: view, belowView: belowView, toEdges: toEdges)
     }
 
     /**
      This is Objective-C wrapper for a helper method that calls the install method non-forcibly. Use it after the receiver's root view has been loaded.
      */
-    func finishInstallChildViewController(_ child: UIViewController, intoView view: UIView? = nil, toEdges: Bool = true) {
-        finishInstall(childViewController: child, intoView: view, toEdges: toEdges)
+    func finishInstallChildViewController(_ child: UIViewController, intoView view: UIView? = nil, belowView: UIView? = nil, toEdges: Bool = true) {
+
+        finishInstall(childViewController: child, intoView: view, belowView: belowView, toEdges: toEdges)
     }
 
     /**
@@ -130,7 +135,8 @@ extension UIViewController {
 
      - Parameter forceLoadView: Pass in `true` in order to force the receiver's root view to load synchronously if it is not loaded at the moment of the call, `false` otherwise. In the case of passing `false` the caller must make sure it calls this method after the view is loaded, ie after the receiver's ``viewDidLoad(animated:)`` is called. The default value is `true`.
      */
-    func installChildViewController(_ child: UIViewController, intoView view: UIView? = nil, toEdges: Bool = true, forceLoadView: Bool = true) {
-        install(childViewController: child, intoView: view, toEdges: toEdges, forceLoadView: forceLoadView)
+    func installChildViewController(_ child: UIViewController, intoView view: UIView? = nil, belowView: UIView? = nil, toEdges: Bool = true, forceLoadView: Bool = true) {
+
+        install(childViewController: child, intoView: view, belowView: belowView, toEdges: toEdges, forceLoadView: forceLoadView)
     }
 }

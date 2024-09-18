@@ -1,0 +1,15 @@
+{
+  "originHash" : "bce6e061042e02fea56b7ea071bb8faaea1c979d1d121435a76cfe90d8bc79d1",
+  "pins" : [
+    {
+      "identity" : "viewlogicpresenter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ivasilyeu/ViewLogicPresenter",
+      "state" : {
+        "revision" : "8d092d740dde52aace1087acbd8272e87c1a794e",
+        "version" : "0.0.1"
+      }
+    }
+  ],
+  "version" : 3
+}
